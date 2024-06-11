@@ -1,0 +1,62 @@
+1. Data Dive (10 pts):
+
+Difficulties and Interesting Observations:
+One difficulty I noticed is that the dataset contains some missing values (represented by "-") for the "Event Name" and "Place" columns. These missing values will need to be handled appropriately during the analysis.
+An interesting observation is that the dataset covers stampede events from as early as 1807 (the Newgate disaster) to as recent as 2021 (the Meron stampede). This wide time range provides an opportunity to analyze trends and patterns in stampede incidents over a long period.
+
+2. Data Fun (20 pts):
+
+Cool Facts:
+
+The highest number of deaths recorded in a single stampede event is 2500, which occurred during the 2015 Mina stampede in Saudi Arabia.
+The country with the highest number of stampede events in the dataset is India, with 21 recorded incidents.
+
+SQL Queries:
+
+	-- Count the total number of stampede events
+	SELECT COUNT(*) AS total_events FROM human_stampedes;
+
+	-- Calculate the average number of deaths per stampede event
+	SELECT AVG(CAST(`Number of Deaths` AS UNSIGNED)) AS avg_deaths 
+	FROM human_stampedes
+	WHERE `Number of Deaths` != '-';
+
+	-- Sum the total number of deaths across all stampede events
+	SELECT SUM(CAST(`Number of Deaths` AS UNSIGNED)) AS total_deaths
+	FROM human_stampedes
+	WHERE `Number of Deaths` != '-';
+
+The queries show that there are 183 stampede events recorded in the dataset. The average number of deaths per stampede event (excluding events with missing data) is approximately 188, and the total number of deaths across all events (excluding missing data) is 34,395.
+
+3. Ask Away (30 pts):
+
+Question 1: Which countries have experienced the highest number of stampede events?
+
+	SELECT Country, COUNT(*) AS event_count
+	FROM human_stampedes
+	WHERE Country != '-'
+	GROUP BY Country
+	ORDER BY event_count DESC;
+
+This query groups the stampede events by country and counts the number of events for each country, excluding events with missing country information. The results are then ordered in descending order by the event count.
+	
+Findings: 
+The top countries with the highest number of stampede events are India (21 events), Saudi Arabia (9 events), United States (8 events), United Kingdom (8 events), and China (7 events).
+
+Question 2: Which years had the highest number of stampede-related death
+
+	SELECT YEAR(`Date`) AS year, SUM(CAST(`Number of Deaths` AS UNSIGNED)) AS total_deaths
+	FROM human_stampedes
+	WHERE `Number of Deaths` != '-'
+	GROUP BY year
+	ORDER BY total_deaths DESC;
+
+This query extracts the year from the "Date" column, sums the "Number of Deaths" for each year (excluding missing data), groups the results by year, and orders them in descending order by the total number of deaths.
+
+Findings: 
+The years with the highest number of stampede-related deaths are 2015 (2500 deaths), 1896 (1389 deaths), 2005 (953 
+deaths), 1990 (1426 deaths), and 1903 (602 deaths).
+
+From these findings, we can observe that certain countries, such as India and Saudi Arabia, have experienced a higher number of stampede events, possibly due to large religious gatherings or inadequate crowd management measures. 
+
+Additionally, some years have seen exceptionally high numbers of stampede-related deaths, highlighting the need for improved safety measures and emergency preparedness during large-scale events.
